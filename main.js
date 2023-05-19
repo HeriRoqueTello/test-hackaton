@@ -25,14 +25,17 @@ const uncheckStatus = `
 btnHome.addEventListener('click', () => {
 	window.location.hash = '#todos';
 	window.location.reload();
+	document.getElementById('my-modal-2').checked = false;
 });
 btnCompletado.addEventListener('click', () => {
 	window.location.hash = '#completados';
 	window.location.reload();
+	document.getElementById('my-modal-2').checked = false;
 });
 btnNoCompletado.addEventListener('click', () => {
 	window.location.hash = '#sincompletar';
 	window.location.reload();
+	document.getElementById('my-modal-2').checked = false;
 });
 
 let fechaNow = moment().format('YYYY-MM-DD');
