@@ -5,7 +5,6 @@ const formEdit = document.getElementById('formEdit');
 const fechaTodo = document.getElementById('fechaTodo');
 const fechaHoy = document.getElementById('fechaHoy');
 const textTareas = document.getElementById('textTareas');
-const textCompletado = document.getElementById('textCompletado');
 
 const indexId = document.getElementById('indexId');
 const inputID = document.getElementById('uuid');
@@ -24,13 +23,16 @@ const uncheckStatus = `
 `;
 
 btnHome.addEventListener('click', () => {
-	window.location.href = '/todos';
+	window.location.hash = '#todos';
+	window.location.reload();
 });
 btnCompletado.addEventListener('click', () => {
-	window.location.href = '/todos/completados';
+	window.location.hash = '#completados';
+	window.location.reload();
 });
 btnNoCompletado.addEventListener('click', () => {
-	window.location.href = '/todos/sincompletar';
+	window.location.hash = '#sincompletar';
+	window.location.reload();
 });
 
 let fechaNow = moment().format('YYYY-MM-DD');
@@ -51,7 +53,7 @@ statusTodos(todos);
 
 const tablaTodos = (url) => {
 	tableTodos.innerHTML = '';
-	if (url === '/todos/completados') {
+	if (url === '#completados') {
 		todos.forEach((todo) => {
 			tableTodos.innerHTML += `
 			<tr class="${todo.terminado ? '' : 'hidden'}">
@@ -79,7 +81,7 @@ const tablaTodos = (url) => {
 			</tr>
 			`;
 		});
-	} else if (url === '/todos/sincompletar') {
+	} else if (url === '#sincompletar') {
 		todos.forEach((todo) => {
 			tableTodos.innerHTML += `
 			<tr class="${todo.terminado ? 'hidden' : ''}">
@@ -138,27 +140,26 @@ const tablaTodos = (url) => {
 	}
 };
 
-switch (window.location.pathname) {
-	case '/todos':
+switch (window.location.hash) {
+	case '#todos':
 		btnHome.className = 'active';
-		tablaTodos(window.location.pathname);
+		tablaTodos(window.location.hash);
 		break;
-	case '/todos/completados':
+	case '#completados':
 		btnCompletado.className = 'active';
 
-		tablaTodos(window.location.pathname);
+		tablaTodos(window.location.hash);
 
 		break;
-	case '/todos/sincompletar':
+	case '#sincompletar':
 		btnNoCompletado.className = 'active';
 
-		tablaTodos(window.location.pathname);
+		tablaTodos(window.location.hash);
 
 		break;
 
 	default:
-		window.location.href = '/todos';
-		btnHome.className = 'active';
+		window.location.hash = '#todos';
 		break;
 }
 
@@ -185,6 +186,7 @@ formTodo.addEventListener('submit', (event) => {
 	data.fechaTodo = fechaNow;
 	data.uuid = generarId();
 	addTodos(data);
+
 	document.getElementById('my-modal-1').checked = false;
 	formTodo.reset();
 	fechaTodo.value = fechaNow;
@@ -213,7 +215,7 @@ formEdit.addEventListener('submit', (event) => {
 		}
 	});
 	editTodo(newListTodos);
-	window.location.reload();
+	// window.location.reload();
 	formTodo.reset();
 });
 
@@ -261,7 +263,7 @@ const appendTodo = (todo) => {
   </tr>
   `;
 	tableTodos.append(...tableTodos.children, tr);
-	tablaTodos(window.location.pathname);
+	tablaTodos(window.location.hash);
 
 	checkTodos();
 };
@@ -282,7 +284,7 @@ const checkTodos = () => {
 				todos[taskIndex].terminado = true;
 				todos[taskIndex].fechaFin = fechaNow;
 				finishTodo(todos);
-				tablaTodos(window.location.pathname);
+				tablaTodos(window.location.hash);
 				checkTodos();
 				// window.location.reload();
 			} else {
@@ -292,7 +294,7 @@ const checkTodos = () => {
 				todos[taskIndex].terminado = false;
 				todos[taskIndex].fechaFin = 'Indefinido';
 				finishTodo(todos);
-				tablaTodos(window.location.pathname);
+				tablaTodos(window.location.hash);
 				checkTodos();
 				// window.location.reload();
 			}
